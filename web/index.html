@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostel Manager</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Include React and ReactDOM from CDN -->
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <!-- Include Babel for JSX transformation -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <!-- Simple version that works without JSX transformations -->
+  <div id="app-container" class="auth-container">
+    <div class="auth-form-container">
+      <h2>Login to Hostel Manager</h2>
+      <form id="login-form" class="auth-form">
+        <div class="form-group">
+          <label for="email">Email or Phone Number</label>
+          <input type="text" id="email" name="email" placeholder="Enter email or phone number" />
+          <span id="email-error" class="error-message" style="display:none;"></span>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" />
+          <span id="password-error" class="error-message" style="display:none;"></span>
+        </div>
+        <button type="submit" class="submit-btn">Login</button>
+      </form>
+      
+      <div class="social-login">
+        <p>Or login with</p>
+        <div class="social-buttons">
+          <button id="google-login" class="social-btn google">Google</button>
+          <button id="facebook-login" class="social-btn facebook">Facebook</button>
+        </div>
+      </div>
+      
+      <div class="auth-switch">
+        <p>Don't have an account? <button id="switch-to-signup">Sign up</button></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Basic form validation
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      let isValid = true;
+      
+      // Reset error messages
+      document.getElementById('email-error').style.display = 'none';
+      document.getElementById('password-error').style.display = 'none';
+      
+      // Email or phone validation
+      if (!email) {
+        document.getElementById('email-error').textContent = 'Email or phone number is required';
+        document.getElementById('email-error').style.display = 'block';
+        isValid = false;
+      } else {
+        // Check if it's a valid email or phone number
+        const isEmail = /\S+@\S+\.\S+/.test(email);
+        const isPhone = /^\d{10,15}$/.test(email.replace(/[-()\s]/g, '')); // Simple phone validation
+        
+        if (!isEmail && !isPhone) {
+          document.getElementById('email-error').textContent = 'Please enter a valid email or phone number';
+          document.getElementById('email-error').style.display = 'block';
+          isValid = false;
+        }
+      }
+      
+      // Password validation
+      if (!password) {
+        document.getElementById('password-error').textContent = 'Password is required';
+        document.getElementById('password-error').style.display = 'block';
+        isValid = false;
+      } else if (password.length < 6) {
+        document.getElementById('password-error').textContent = 'Password must be at least 6 characters';
+        document.getElementById('password-error').style.display = 'block';
+        isValid = false;
+      }
+      
+      if (isValid) {
+        console.log('Login with:', { email, password });
+        // Here we would normally call an API
+        // For demo purposes, we'll redirect to a "dashboard"
+        document.getElementById('app-container').innerHTML = `
+          <div class="dashboard">
+            <header>
+              <h1>Hostel Manager Dashboard</h1>
+              <div class="user-info">
+                <span>Welcome, Demo User</span>
+                <button id="logout-btn" class="logout-btn">Logout</button>
+              </div>
+            </header>
+            <div class="dashboard-content">
+              <h2>Your Dashboard</h2>
+              <p>This is where hostel management features will be implemented.</p>
+              <div class="feature-cards">
+                <div class="card">
+                  <h3>Room Management</h3>
+                  <p>Add, edit and manage hostel rooms</p>
+                </div>
+                <div class="card">
+                  <h3>Booking System</h3>
+                  <p>Handle reservations and check-ins</p>
+                </div>
+                <div class="card">
+                  <h3>Staff Management</h3>
+                  <p>Manage staff schedules and permissions</p>
+                </div>
+                <div class="card">
+                  <h3>Analytics</h3>
+                  <p>View occupancy rates and financial reports</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Add logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function() {
+          window.location.reload();
+        });
+      }
+    });
+    
+    // Social login handlers
+    document.getElementById('google-login').addEventListener('click', function() {
+      console.log('Social login with Google');
+      // In a real app, we would redirect to Google OAuth
+      alert('Google login would be implemented in production');
+    });
+    
+    document.getElementById('facebook-login').addEventListener('click', function() {
+      console.log('Social login with Facebook');
+      // In a real app, we would redirect to Facebook OAuth
+      alert('Facebook login would be implemented in production');
+    });
+    
+    // Switch to signup form
+    document.getElementById('switch-to-signup').addEventListener('click', function() {
+      document.getElementById('app-container').innerHTML = `
+        <div class="auth-form-container">
+          <h2>Create an Account</h2>
+          <form id="signup-form" class="auth-form">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" />
+              <span id="name-error" class="error-message" style="display:none;"></span>
+            </div>
+            <div class="form-group">
+              <label for="signup-email">Email or Phone Number</label>
+              <input type="text" id="signup-email" name="email" placeholder="Enter email or phone number" />
+              <span id="signup-email-error" class="error-message" style="display:none;"></span>
+            </div>
+            <div class="form-group">
+              <label for="signup-password">Password</label>
+              <input type="password" id="signup-password" name="password" />
+              <span id="signup-password-error" class="error-message" style="display:none;"></span>
+            </div>
+            <div class="form-group">
+              <label for="confirm-password">Confirm Password</label>
+              <input type="password" id="confirm-password" name="confirmPassword" />
+              <span id="confirm-password-error" class="error-message" style="display:none;"></span>
+            </div>
+            <button type="submit" class="submit-btn">Sign Up</button>
+          </form>
+          
+          <div class="social-login">
+            <p>Or sign up with</p>
+            <div class="social-buttons">
+              <button id="google-signup" class="social-btn google">Google</button>
+              <button id="facebook-signup" class="social-btn facebook">Facebook</button>
+            </div>
+          </div>
+          
+          <div class="auth-switch">
+            <p>Already have an account? <button id="switch-to-login">Login</button></p>
+          </div>
+        </div>
+      `;
+      
+      // Add event listeners for the signup form
+      document.getElementById('signup-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        let isValid = true;
+        
+        // Reset error messages
+        document.getElementById('name-error').style.display = 'none';
+        document.getElementById('signup-email-error').style.display = 'none';
+        document.getElementById('signup-password-error').style.display = 'none';
+        document.getElementById('confirm-password-error').style.display = 'none';
+        
+        // Name validation
+        if (!name) {
+          document.getElementById('name-error').textContent = 'Name is required';
+          document.getElementById('name-error').style.display = 'block';
+          isValid = false;
+        }
+        
+        // Email or phone validation
+        if (!email) {
+          document.getElementById('signup-email-error').textContent = 'Email or phone number is required';
+          document.getElementById('signup-email-error').style.display = 'block';
+          isValid = false;
+        } else {
+          // Check if it's a valid email or phone number
+          const isEmail = /\S+@\S+\.\S+/.test(email);
+          const isPhone = /^\d{10,15}$/.test(email.replace(/[-()\s]/g, '')); // Simple phone validation
+          
+          if (!isEmail && !isPhone) {
+            document.getElementById('signup-email-error').textContent = 'Please enter a valid email or phone number';
+            document.getElementById('signup-email-error').style.display = 'block';
+            isValid = false;
+          }
+        }
+        
+        // Password validation
+        if (!password) {
+          document.getElementById('signup-password-error').textContent = 'Password is required';
+          document.getElementById('signup-password-error').style.display = 'block';
+          isValid = false;
+        } else if (password.length < 6) {
+          document.getElementById('signup-password-error').textContent = 'Password must be at least 6 characters';
+          document.getElementById('signup-password-error').style.display = 'block';
+          isValid = false;
+        }
+        
+        // Confirm password validation
+        if (!confirmPassword) {
+          document.getElementById('confirm-password-error').textContent = 'Please confirm your password';
+          document.getElementById('confirm-password-error').style.display = 'block';
+          isValid = false;
+        } else if (confirmPassword !== password) {
+          document.getElementById('confirm-password-error').textContent = 'Passwords do not match';
+          document.getElementById('confirm-password-error').style.display = 'block';
+          isValid = false;
+        }
+        
+        if (isValid) {
+          console.log('Signup with:', { name, email, password });
+          // Here we would normally call an API
+          // For demo purposes, we'll redirect to a "dashboard"
+          document.getElementById('app-container').innerHTML = `
+            <div class="dashboard">
+              <header>
+                <h1>Hostel Manager Dashboard</h1>
+                <div class="user-info">
+                  <span>Welcome, ${name}</span>
+                  <button id="logout-btn" class="logout-btn">Logout</button>
+                </div>
+              </header>
+              <div class="dashboard-content">
+                <h2>Your Dashboard</h2>
+                <p>This is where hostel management features will be implemented.</p>
+                <div class="feature-cards">
+                  <div class="card">
+                    <h3>Room Management</h3>
+                    <p>Add, edit and manage hostel rooms</p>
+                  </div>
+                  <div class="card">
+                    <h3>Booking System</h3>
+                    <p>Handle reservations and check-ins</p>
+                  </div>
+                  <div class="card">
+                    <h3>Staff Management</h3>
+                    <p>Manage staff schedules and permissions</p>
+                  </div>
+                  <div class="card">
+                    <h3>Analytics</h3>
+                    <p>View occupancy rates and financial reports</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          // Add logout functionality
+          document.getElementById('logout-btn').addEventListener('click', function() {
+            window.location.reload();
+          });
+        }
+      });
+      
+      // Social signup handlers
+      document.getElementById('google-signup').addEventListener('click', function() {
+        console.log('Social signup with Google');
+        // In a real app, we would redirect to Google OAuth
+        alert('Google signup would be implemented in production');
+      });
+      
+      document.getElementById('facebook-signup').addEventListener('click', function() {
+        console.log('Social signup with Facebook');
+        // In a real app, we would redirect to Facebook OAuth
+        alert('Facebook signup would be implemented in production');
+      });
+      
+      // Switch back to login form
+      document.getElementById('switch-to-login').addEventListener('click', function() {
+        window.location.reload();
+      });
+    });
+  </script>
+</body>
+</html>

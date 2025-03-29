@@ -1,0 +1,29 @@
+{
+  "name": "HostelHive",
+  "expo": {
+    "name": "HostelHive",
+    "slug": "HostelHive",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "splash": {
+      "backgroundColor": "#FFFFFF"
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png",
+      "build": {
+        "babel": {
+          "include": [
+            "@expo/vector-icons"
+          ]
+        }
+      }
+    },
+    "android": {
+      "package": "com.anonymous.HostelHive"
+    },
+    "ios": {
+      "bundleIdentifier": "com.anonymous.HostelHive"
+    }
+  }
+}
